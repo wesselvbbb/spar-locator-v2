@@ -1,40 +1,21 @@
-import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import * as React from "react";
+import Home from "./Components/Home";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Settings from "./Components/Settings";
+import Map from "./Components/Map";
+import { TouchableOpacity } from "react-native";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [items, setItems] = useState([]);
-  useEffect(() => {
-    fetch(
-      "https://stud.hosted.hr.nl/1027694/Programmeren/PRG07/Spar-Locator/webservice.json"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setItems(data.items);
-      })
-      .catch((error) => {
-        console.error(error);
-        setItems([]);
-      });
-  }, []);
-
   return (
-    <View style={styles.container}>
-      {items.map((item, index) => (
-        <View key={index}>
-          <Text className="text-red-500">{item.title}</Text>
-          <Text className="text-red-500">{item.description}</Text>
-        </View>
-      ))}
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="Settings" component={Settings} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
