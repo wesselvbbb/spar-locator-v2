@@ -27,11 +27,18 @@ export default function Home({ navigation }) {
           <View className="max-w-md w-full" key={index}>
             <View className="p-2">
               <View className="bg-gray-200 p-4 rounded-md gap-y-2">
+                <View className="flex items-end justify-end">
+                  {/* If liked show filled basket */}
+                  <TouchableOpacity>
+                    <Ionicons name="basket-outline" size={24} color="#D43E41" />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity>
+                    <Ionicons name="basket" size={24} color="#D43E41" />
+                  </TouchableOpacity>
+                </View>
                 <Text className="font-bold text-xl">{item.title}</Text>
                 <Text className="">{item.description}</Text>
-                <TouchableOpacity>
-                  <Ionicons name="star" size={16} color="yellow" />
-                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -39,7 +46,7 @@ export default function Home({ navigation }) {
       </View>
       <View className="flex-row w-full items-center justify-between px-10 bg-green h-24">
         <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
-          <Ionicons name="star" size={32} color="white" />
+          <Ionicons name="basket" size={32} color="white" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Map")}>
           <Ionicons name="map" size={32} color="white" />
