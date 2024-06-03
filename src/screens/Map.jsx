@@ -68,9 +68,11 @@ export default function Map() {
               longitude: marker.longitude,
             }}
             title={marker.title}
+            // TODO: Add function to go to store page
+            onPress={(e) => console.log("Going to store page")}
           >
             <Image
-              source={require("../assets/sparlogo.png")}
+              source={require("@../../../assets/sparlogo.png")}
               style={{ width: 30, height: 30, objectFit: "contain" }}
             />
           </Marker>
@@ -81,7 +83,7 @@ export default function Map() {
               latitude: location.latitude,
               longitude: location.longitude,
             }}
-            title="Your Location"
+            title="You're here!"
           >
             <Ionicons name="location" size={24} color="#D43E41" />
           </Marker>

@@ -19,34 +19,38 @@ export default function Home({ navigation }) {
       });
   }, []);
 
-  const isLiked = false;
+  const isLiked = true;
 
   return (
     <>
       <ScrollView className="h-full">
         <View className="py-4 flex-1 justify-center items-center">
-          <Text className="text-3xl font-bold">Spar Locator</Text>
+          <Text className="text-3xl font-bold py-2">Spar Locator</Text>
           {items.map((item, index) => (
             <View className="max-w-md w-full" key={index}>
               <View className="p-2">
                 <View className="bg-gray-200 p-4 rounded-md gap-y-2">
-                  <View className="flex items-end justify-end">
-                    {/* If liked show filled basket */}
-
+                  <View className="flex flex-row items-center justify-between">
+                    <Text className="font-bold text-xl">{item.title}</Text>
                     <TouchableOpacity>
                       <Ionicons
-                        name="basket-outline"
+                        name={isLiked ? "basket" : "basket-outline"}
                         size={24}
                         color="#D43E41"
                       />
                     </TouchableOpacity>
-
-                    <TouchableOpacity>
-                      <Ionicons name="basket" size={24} color="#D43E41" />
-                    </TouchableOpacity>
                   </View>
-                  <Text className="font-bold text-xl">{item.title}</Text>
+
                   <Text className="">{item.description}</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Map", { location: item.location })
+                    }
+                  >
+                    <Text className="text-green underline font-semibold">
+                      Show on map
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>

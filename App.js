@@ -1,10 +1,9 @@
 import * as React from "react";
-import Home from "./Components/Home";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Settings from "./Components/Settings";
-import Map from "./Components/Map";
-import { TouchableOpacity } from "react-native";
+import Settings from "./src/screens/Settings";
+import Map from "./src/screens/Map";
+import Home from "./src/screens/Home";
 
 const Stack = createNativeStackNavigator();
 
