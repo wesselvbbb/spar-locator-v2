@@ -19,32 +19,41 @@ export default function Home({ navigation }) {
       });
   }, []);
 
-  return (
-    <ScrollView className="h-full">
-      <View className="py-4 flex-1 justify-center items-center">
-        <Text className="text-3xl font-bold">Spar Locator</Text>
-        {items.map((item, index) => (
-          <View className="max-w-md w-full" key={index}>
-            <View className="p-2">
-              <View className="bg-gray-200 p-4 rounded-md gap-y-2">
-                <View className="flex items-end justify-end">
-                  {/* If liked show filled basket */}
-                  <TouchableOpacity>
-                    <Ionicons name="basket-outline" size={24} color="#D43E41" />
-                  </TouchableOpacity>
+  const isLiked = false;
 
-                  <TouchableOpacity>
-                    <Ionicons name="basket" size={24} color="#D43E41" />
-                  </TouchableOpacity>
+  return (
+    <>
+      <ScrollView className="h-full">
+        <View className="py-4 flex-1 justify-center items-center">
+          <Text className="text-3xl font-bold">Spar Locator</Text>
+          {items.map((item, index) => (
+            <View className="max-w-md w-full" key={index}>
+              <View className="p-2">
+                <View className="bg-gray-200 p-4 rounded-md gap-y-2">
+                  <View className="flex items-end justify-end">
+                    {/* If liked show filled basket */}
+
+                    <TouchableOpacity>
+                      <Ionicons
+                        name="basket-outline"
+                        size={24}
+                        color="#D43E41"
+                      />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity>
+                      <Ionicons name="basket" size={24} color="#D43E41" />
+                    </TouchableOpacity>
+                  </View>
+                  <Text className="font-bold text-xl">{item.title}</Text>
+                  <Text className="">{item.description}</Text>
                 </View>
-                <Text className="font-bold text-xl">{item.title}</Text>
-                <Text className="">{item.description}</Text>
               </View>
             </View>
-          </View>
-        ))}
-      </View>
-      <View className="flex-row w-full items-center justify-between px-10 bg-green h-24">
+          ))}
+        </View>
+      </ScrollView>
+      <View className="flex-row w-full items-center justify-between px-10 bg-green h-20">
         <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
           <Ionicons name="basket" size={32} color="white" />
         </TouchableOpacity>
@@ -55,6 +64,6 @@ export default function Home({ navigation }) {
           <Ionicons name="settings-sharp" size={32} color="white" />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </>
   );
 }
