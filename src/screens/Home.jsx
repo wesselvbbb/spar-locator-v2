@@ -31,7 +31,7 @@ export default function Home({ navigation }) {
         const parsedItems = JSON.parse(savedLikedItems).filter(
           (item) => typeof item === "object" && item !== null
         );
-        console.log("Loaded liked items:", parsedItems);
+
         setLikedItems(parsedItems);
       }
     } catch (error) {
@@ -55,7 +55,6 @@ export default function Home({ navigation }) {
         "likedItems",
         JSON.stringify(updatedLikedItems)
       );
-      console.log("Updated liked items:", updatedLikedItems);
     } catch (error) {
       console.error("Failed to save liked items", error);
     }
