@@ -18,8 +18,9 @@ export default function Map() {
   const mapRef = useRef(null);
 
   const [markers, setMarkers] = useState([]);
-  const [selectedMarker, setSelectedMarker] = useState(null); // State to track the selected marker
-  const [modalVisible, setModalVisible] = useState(false); // State to control the modal visibility
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [distance, setDistance] = useState(null);
 
   useEffect(() => {
     fetch(
@@ -62,7 +63,31 @@ export default function Map() {
 
   const handleMarkerPress = (marker) => {
     setSelectedMarker(marker);
+    calculateDistance(marker);
     setModalVisible(true);
+  };
+
+  // Calculate the distance between user and store
+  // Source: https://www.movable-type.co.uk/scripts/latlong.html
+  const calculateDistance = (marker) => {
+    if (location) {
+      const R = 6371;
+      const lat1 = location.latitude;
+      const lon1 = location.longitude;
+      const lat2 = marker.latitude;
+      const lon2 = marker.longitude;
+      const dLat = (lat2 - lat1) * (Math.PI / 180);
+      const dLon = (lon2 - lon1) * (Math.PI / 180);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) *
+          Math.cos(lat2 * (Math.PI / 180)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const distance = R * c;
+      setDistance(distance.toFixed(2));
+    }
   };
 
   return (
@@ -84,7 +109,6 @@ export default function Map() {
               latitude: marker.latitude,
               longitude: marker.longitude,
             }}
-            title={marker.title}
             onPress={() => handleMarkerPress(marker)}
           >
             <Image
@@ -113,7 +137,7 @@ export default function Map() {
       </TouchableOpacity>
 
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -124,6 +148,7 @@ export default function Map() {
           <View className="px-5 py-2 pt-10 rounded-lg gap-y-4">
             <Text className="text-xl font-bold">{selectedMarker?.title}</Text>
             <Text>{selectedMarker?.description}</Text>
+            {distance && <Text>Distance: {distance} km</Text>}
             <TouchableOpacity
               className="bg-red px-4 py-2 w-1/2 rounded-lg flex items-center justify-center"
               onPress={() => setModalVisible(false)}

@@ -15,6 +15,7 @@
     "expo": "~51.0.8",
     "expo-location": "~17.0.1",
     "expo-status-bar": "~1.12.1",
+    "geolib": "^3.3.4",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.74.1",
