@@ -1,8 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ScrollView, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Modal,
+} from "react-native";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Map() {
   const [location, setLocation] = useState(null);
@@ -10,6 +18,8 @@ export default function Map() {
   const mapRef = useRef(null);
 
   const [markers, setMarkers] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null); // State to track the selected marker
+  const [modalVisible, setModalVisible] = useState(false); // State to control the modal visibility
 
   useEffect(() => {
     fetch(
@@ -48,6 +58,13 @@ export default function Map() {
     }
   };
 
+  const navigation = useNavigation();
+
+  const handleMarkerPress = (marker) => {
+    setSelectedMarker(marker);
+    setModalVisible(true);
+  };
+
   return (
     <>
       <MapView
@@ -68,8 +85,7 @@ export default function Map() {
               longitude: marker.longitude,
             }}
             title={marker.title}
-            // TODO: Add function to go to store page
-            onPress={(e) => console.log("Going to store page")}
+            onPress={() => handleMarkerPress(marker)}
           >
             <Image
               source={require("@../../../assets/sparlogo.png")}
@@ -95,6 +111,28 @@ export default function Map() {
       >
         <Ionicons name="location" size={42} color="#D43E41" />
       </TouchableOpacity>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <View className="bg-white h-72 w-full absolute bottom-0">
+          <View className="px-5 py-2 pt-10 rounded-lg gap-y-4">
+            <Text className="text-xl font-bold">{selectedMarker?.title}</Text>
+            <Text>{selectedMarker?.description}</Text>
+            <TouchableOpacity
+              className="bg-red px-4 py-2 w-1/2 rounded-lg flex items-center justify-center"
+              onPress={() => setModalVisible(false)}
+            >
+              <Text className="text-white font-bold">Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -111,9 +149,25 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 10,
   },
-  locationIcon: {
-    width: 24,
-    height: 24,
-    resizeMode: "contain",
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  description: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  closeButton: {
+    fontSize: 18,
+    color: "#D43E41",
+    textAlign: "center",
+    marginTop: 20,
   },
 });
