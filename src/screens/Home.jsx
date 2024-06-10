@@ -2,9 +2,12 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home({ navigation }) {
   const [items, setItems] = useState([]);
+  const [likedItems, setLikedItems] = useState([]);
+
   useEffect(() => {
     fetch(
       "https://stud.hosted.hr.nl/1027694/Programmeren/PRG07/Spar-Locator/webservice.json"
@@ -17,9 +20,49 @@ export default function Home({ navigation }) {
         console.error(error);
         setItems([]);
       });
+
+    loadLikedItems();
   }, []);
 
-  const isLiked = true;
+  const loadLikedItems = async () => {
+    try {
+      const savedLikedItems = await AsyncStorage.getItem("likedItems");
+      if (savedLikedItems) {
+        const parsedItems = JSON.parse(savedLikedItems).filter(
+          (item) => typeof item === "object" && item !== null
+        );
+        console.log("Loaded liked items:", parsedItems);
+        setLikedItems(parsedItems);
+      }
+    } catch (error) {
+      console.error("Failed to load liked items", error);
+    }
+  };
+
+  const toggleLikeItem = async (item) => {
+    let updatedLikedItems;
+    if (likedItems.some((likedItem) => likedItem.title === item.title)) {
+      updatedLikedItems = likedItems.filter(
+        (likedItem) => likedItem.title !== item.title
+      );
+    } else {
+      updatedLikedItems = [...likedItems, item];
+    }
+    setLikedItems(updatedLikedItems);
+
+    try {
+      await AsyncStorage.setItem(
+        "likedItems",
+        JSON.stringify(updatedLikedItems)
+      );
+      console.log("Updated liked items:", updatedLikedItems);
+    } catch (error) {
+      console.error("Failed to save liked items", error);
+    }
+  };
+
+  const isLiked = (title) =>
+    likedItems.some((likedItem) => likedItem.title === title);
 
   return (
     <>
@@ -32,9 +75,9 @@ export default function Home({ navigation }) {
                 <View className="bg-gray-200 p-4 rounded-md gap-y-2">
                   <View className="flex flex-row items-center justify-between">
                     <Text className="font-bold text-xl">{item.title}</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => toggleLikeItem(item)}>
                       <Ionicons
-                        name={isLiked ? "basket" : "basket-outline"}
+                        name={isLiked(item.title) ? "basket" : "basket-outline"}
                         size={24}
                         color="#D43E41"
                       />
@@ -58,7 +101,7 @@ export default function Home({ navigation }) {
         </View>
       </ScrollView>
       <View className="flex-row w-full items-center justify-between px-10 bg-green h-20">
-        <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Favorites")}>
           <Ionicons name="basket" size={32} color="white" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Map")}>
