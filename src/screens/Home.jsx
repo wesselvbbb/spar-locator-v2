@@ -86,7 +86,10 @@ export default function Home({ navigation }) {
                   <Text className="">{item.description}</Text>
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate("Map", { location: item.location })
+                      navigation.navigate("Map", {
+                        location: item.location,
+                        store: item,
+                      })
                     }
                   >
                     <Text className="text-green underline font-semibold">

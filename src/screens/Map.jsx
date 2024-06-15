@@ -10,7 +10,7 @@ import {
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 export default function Map() {
   const [location, setLocation] = useState(null);
@@ -21,6 +21,9 @@ export default function Map() {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [distance, setDistance] = useState(null);
+
+  const route = useRoute();
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetch(
@@ -33,7 +36,11 @@ export default function Map() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+
+    if (route.params?.store) {
+      handleMarkerPress(route.params.store);
+    }
+  }, [route.params]);
 
   useEffect(() => {
     (async () => {
@@ -59,16 +66,21 @@ export default function Map() {
     }
   };
 
-  const navigation = useNavigation();
-
   const handleMarkerPress = (marker) => {
     setSelectedMarker(marker);
     calculateDistance(marker);
     setModalVisible(true);
+    mapRef.current.animateToRegion({
+      latitude: marker.latitude,
+      longitude: marker.longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    });
   };
 
   // Calculate the distance between user and store
   // Source: https://www.movable-type.co.uk/scripts/latlong.html
+
   const calculateDistance = (marker) => {
     if (location) {
       const R = 6371;
@@ -95,6 +107,7 @@ export default function Map() {
       <MapView
         ref={mapRef}
         style={styles.map}
+        showsUserLocation={true}
         region={{
           latitude: 51.926517,
           longitude: 4.462456,
@@ -117,23 +130,14 @@ export default function Map() {
             />
           </Marker>
         ))}
-        {location && (
-          <Marker
-            coordinate={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-            }}
-            title="You're here!"
-          >
-            <Ionicons name="location" size={24} color="#D43E41" />
-          </Marker>
-        )}
       </MapView>
       <TouchableOpacity
         style={[styles.locationButton]}
         onPress={goToUserLocation}
       >
-        <Ionicons name="location" size={42} color="#D43E41" />
+        <View className="bg-white rounded-full p-2">
+          <Ionicons name="pin-sharp" size={32} color="#D43E41" />
+        </View>
       </TouchableOpacity>
 
       <Modal
