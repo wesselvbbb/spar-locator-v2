@@ -8,12 +8,26 @@ import {
   ThemeProvider,
   ThemeContext,
 } from "./src/components/context/ThemeContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import "./src/components/i18n";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const { theme } = useContext(ThemeContext);
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    const loadLanguage = async () => {
+      const storedLanguage = await AsyncStorage.getItem("selectedLanguage");
+      if (storedLanguage) {
+        i18n.changeLanguage(storedLanguage);
+      }
+    };
+    loadLanguage();
+  }, [i18n]);
 
   return (
     <ThemeProvider>
@@ -21,7 +35,7 @@ export default function App() {
         <Stack.Navigator
           screenOptions={{
             headerTitle: "",
-            headerBackTitle: "Back",
+            headerBackTitle: t("back"),
             headerTintColor: "#fff",
             headerStyle: {
               backgroundColor: "#32733C",
