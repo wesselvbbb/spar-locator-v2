@@ -9,7 +9,7 @@ export default function Home({ navigation }) {
   const [items, setItems] = useState([]);
   const [likedItems, setLikedItems] = useState([]);
 
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     fetch(
@@ -129,6 +129,8 @@ export default function Home({ navigation }) {
           ))}
         </View>
       </ScrollView>
+
+      {/* Navigation */}
       <View
         className={`flex-row w-full items-center justify-between px-10 h-20 ${
           theme === "light" ? "bg-green" : "bg-black"
