@@ -1,12 +1,15 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeContext } from "../components/context/ThemeContext";
 
 export default function Home({ navigation }) {
   const [items, setItems] = useState([]);
   const [likedItems, setLikedItems] = useState([]);
+
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     fetch(
@@ -65,15 +68,33 @@ export default function Home({ navigation }) {
 
   return (
     <>
-      <ScrollView className="h-full">
-        <View className="py-4 flex-1 justify-center items-center">
-          <Text className="text-3xl font-bold py-2">Spar Locator</Text>
+      <ScrollView
+        className={`h-full ${theme === "light" ? "bg-white" : "bg-black"}`}
+      >
+        <View className="py-4 flex-1 justify-center items-center ">
+          <Text
+            className={`text-3xl font-bold py-2 ${
+              theme === "light" ? "text-black" : "text-white"
+            }`}
+          >
+            Spar Locator
+          </Text>
           {items.map((item, index) => (
             <View className="max-w-md w-full" key={index}>
               <View className="p-2">
-                <View className="bg-gray-200 p-4 rounded-md gap-y-2">
+                <View
+                  className={`p-4 rounded-md gap-y-2 ${
+                    theme === "light" ? "bg-gray-200" : "bg-gray-800"
+                  }`}
+                >
                   <View className="flex flex-row items-center justify-between">
-                    <Text className="font-bold text-xl">{item.title}</Text>
+                    <Text
+                      className={`font-bold text-xl ${
+                        theme === "light" ? "text-black" : "text-white"
+                      }`}
+                    >
+                      {item.title}
+                    </Text>
                     <TouchableOpacity onPress={() => toggleLikeItem(item)}>
                       <Ionicons
                         name={isLiked(item.title) ? "basket" : "basket-outline"}
@@ -83,7 +104,13 @@ export default function Home({ navigation }) {
                     </TouchableOpacity>
                   </View>
 
-                  <Text className="">{item.description}</Text>
+                  <Text
+                    className={`${
+                      theme === "light" ? "text-black" : "text-white"
+                    }`}
+                  >
+                    {item.description}
+                  </Text>
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate("Map", {
@@ -102,7 +129,11 @@ export default function Home({ navigation }) {
           ))}
         </View>
       </ScrollView>
-      <View className="flex-row w-full items-center justify-between px-10 bg-green h-20">
+      <View
+        className={`flex-row w-full items-center justify-between px-10 h-20 ${
+          theme === "light" ? "bg-green" : "bg-black"
+        }`}
+      >
         <TouchableOpacity onPress={() => navigation.navigate("Favorites")}>
           <Ionicons name="basket" size={32} color="white" />
         </TouchableOpacity>

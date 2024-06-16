@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   Text,
   Image,
@@ -11,6 +11,7 @@ import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { ThemeContext } from "../components/context/ThemeContext";
 
 export default function Map() {
   const [location, setLocation] = useState(null);
@@ -21,6 +22,8 @@ export default function Map() {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [distance, setDistance] = useState(null);
+
+  const { theme } = useContext(ThemeContext);
 
   const route = useRoute();
   const navigation = useNavigation();
@@ -114,6 +117,7 @@ export default function Map() {
           latitudeDelta: 0.2,
           longitudeDelta: 0.2,
         }}
+        userInterfaceStyle={theme === "light" ? "light" : "dark"}
       >
         {markers.map((marker, index) => (
           <Marker
@@ -135,7 +139,11 @@ export default function Map() {
         style={[styles.locationButton]}
         onPress={goToUserLocation}
       >
-        <View className="bg-white rounded-full p-2">
+        <View
+          className={`rounded-full p-2 ${
+            theme === "light" ? "bg-white" : "bg-black"
+          }`}
+        >
           <Ionicons name="pin-sharp" size={32} color="#D43E41" />
         </View>
       </TouchableOpacity>
@@ -148,11 +156,31 @@ export default function Map() {
           setModalVisible(false);
         }}
       >
-        <View className="bg-white h-72 w-full absolute bottom-0">
+        <View
+          className={`h-72 w-full absolute bottom-0 ${
+            theme === "light" ? "bg-white" : "bg-black"
+          }`}
+        >
           <View className="px-5 py-2 pt-10 rounded-lg gap-y-4">
-            <Text className="text-xl font-bold">{selectedMarker?.title}</Text>
-            <Text>{selectedMarker?.description}</Text>
-            {distance && <Text>Distance: {distance} km</Text>}
+            <Text
+              className={`text-xl font-bold ${
+                theme === "light" ? "text-black" : "text-white"
+              }`}
+            >
+              {selectedMarker?.title}
+            </Text>
+            <Text
+              className={`${theme === "light" ? "text-black" : "text-white"}`}
+            >
+              {selectedMarker?.description}
+            </Text>
+            {distance && (
+              <Text
+                className={`${theme === "light" ? "text-black" : "text-white"}`}
+              >
+                Distance: {distance} km
+              </Text>
+            )}
             <TouchableOpacity
               className="bg-red px-4 py-2 w-1/2 rounded-lg flex items-center justify-center"
               onPress={() => setModalVisible(false)}

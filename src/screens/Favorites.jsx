@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeContext } from "../components/context/ThemeContext";
 
-export default function Favorites({ navigation }) {
+export default function Favorites() {
   const [likedItems, setLikedItems] = useState([]);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const loadLikedItems = async () => {
@@ -25,23 +26,51 @@ export default function Favorites({ navigation }) {
   }, []);
 
   return (
-    <ScrollView className="h-full">
+    <ScrollView
+      className={`h-full ${theme === "light" ? "bg-white" : "bg-black"}`}
+    >
       <View className="my-16 flex-1 justify-center items-center">
-        <Text className="text-3xl font-bold">Favorites</Text>
+        <Text
+          className={`text-3xl font-bold ${
+            theme === "light" ? "text-black" : "text-white"
+          }`}
+        >
+          Favorites
+        </Text>
       </View>
       {likedItems.length > 0 ? (
         likedItems.map((item, index) => (
           <View className="p-2" key={index}>
-            <View className="bg-gray-200 p-4 rounded-md gap-y-2">
-              <Text className="font-bold text-xl">{item.title}</Text>
+            <View
+              className={`p-4 rounded-md gap-y-2 ${
+                theme === "light" ? "bg-gray-200" : "bg-gray-800"
+              }`}
+            >
+              <Text
+                className={`font-bold text-xl ${
+                  theme === "light" ? "text-black" : "text-white"
+                }`}
+              >
+                {item.title}
+              </Text>
 
-              <Text>{item.description}</Text>
+              <Text
+                className={`${theme === "light" ? "text-black" : "text-white"}`}
+              >
+                {item.description}
+              </Text>
             </View>
           </View>
         ))
       ) : (
         <View className="flex-1 justify-center items-center">
-          <Text className="text-lg">No favorites yet!</Text>
+          <Text
+            className={`text-lg ${
+              theme === "light" ? "text-black" : "text-white"
+            }`}
+          >
+            No favorites yet!
+          </Text>
         </View>
       )}
     </ScrollView>
