@@ -12,23 +12,33 @@ export default function Settings() {
   const { t, i18n } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(null);
 
+  // Load the selected language from AsyncStorage on mounting
   useEffect(() => {
     const getLanguage = async () => {
       const storedLanguage = await AsyncStorage.getItem("selectedLanguage");
       if (storedLanguage) {
         setSelectedLanguage(storedLanguage);
-        i18n.changeLanguage(storedLanguage);
+        i18n.changeLanguage(storedLanguage); // Update i18n with stored language
       }
     };
     getLanguage();
   }, []);
 
+  // Function to change the selected language
   const changeLanguage = async (lng) => {
-    await AsyncStorage.setItem("selectedLanguage", lng);
-    setSelectedLanguage(lng);
-    i18n.changeLanguage(lng);
+    await AsyncStorage.setItem("selectedLanguage", lng); // Save selected language
+    setSelectedLanguage(lng); // update state with selected language
+    i18n.changeLanguage(lng); // update i18n with new language
   };
 
+  // Array for all languages with iso codes
+  const languages = [
+    { isoCode: "gb", lang: "en" },
+    { isoCode: "nl", lang: "nl" },
+    { isoCode: "es", lang: "es" },
+    { isoCode: "it", lang: "it" },
+    { isoCode: "de", lang: "de" },
+  ]
   return (
     <ScrollView
       className={`h-full ${theme === "light" ? "bg-white" : "bg-black"}`}
@@ -67,13 +77,9 @@ export default function Settings() {
           {t("Settings.language")}
         </Text>
         <View className="flex flex-row gap-4">
-          {[
-            { isoCode: "gb", lang: "en" },
-            { isoCode: "nl", lang: "nl" },
-            { isoCode: "es", lang: "es" },
-            { isoCode: "it", lang: "it" },
-            { isoCode: "de", lang: "de" },
-          ].map(({ isoCode, lang }) => (
+          {/* Map languages for country flags */}
+          {
+          languages.map(({ isoCode, lang }) => (
             <TouchableOpacity
               key={isoCode}
               onPress={() => changeLanguage(lang)}

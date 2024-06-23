@@ -8,13 +8,16 @@ import { useTranslation } from "react-i18next";
 import "../components/i18n";
 
 export default function Home({ navigation }) {
-  const [items, setItems] = useState([]);
-  const [likedItems, setLikedItems] = useState([]);
+  const [items, setItems] = useState([]); // Store items fetched from the api
+  const [likedItems, setLikedItems] = useState([]); // Store liked items
 
+  // Retrieve theme context value
   const { theme } = useContext(ThemeContext);
 
-  const { t, i18n } = useTranslation();
+  // Translation functions
+  const { t } = useTranslation();
 
+  // Effect to fetch items and load liked items on mounting
   useEffect(() => {
     fetch(
       "https://stud.hosted.hr.nl/1027694/Programmeren/PRG07/Spar-Locator/webservice.json"
@@ -31,6 +34,7 @@ export default function Home({ navigation }) {
     loadLikedItems();
   }, []);
 
+  // Load liked items from AsyncStorage
   const loadLikedItems = async () => {
     try {
       const savedLikedItems = await AsyncStorage.getItem("likedItems");
@@ -46,14 +50,16 @@ export default function Home({ navigation }) {
     }
   };
 
+  // Toggle like status from an item
   const toggleLikeItem = async (item) => {
     let updatedLikedItems;
     if (likedItems.some((likedItem) => likedItem.title === item.title)) {
       updatedLikedItems = likedItems.filter(
         (likedItem) => likedItem.title !== item.title
       );
+      // Remove item from liked items
     } else {
-      updatedLikedItems = [...likedItems, item];
+      updatedLikedItems = [...likedItems, item]; // Add item to liked items
     }
     setLikedItems(updatedLikedItems);
 
@@ -61,12 +67,13 @@ export default function Home({ navigation }) {
       await AsyncStorage.setItem(
         "likedItems",
         JSON.stringify(updatedLikedItems)
-      );
+      ); // Save updated liked items to AsyncStorage
     } catch (error) {
       console.error("Failed to save liked items", error);
     }
   };
 
+  // Checks if an item with title is stored in the likedItems array
   const isLiked = (title) =>
     likedItems.some((likedItem) => likedItem.title === title);
 
@@ -130,7 +137,9 @@ export default function Home({ navigation }) {
                       })
                     }
                   >
-                    <Text className="text-green underline font-semibold">
+                    <Text className={`underline font-semibold ${
+                      theme === "light" ? "text-green" : "text-light-green"
+                    }`}>
                       {t("show_on_map")}
                     </Text>
                   </TouchableOpacity>

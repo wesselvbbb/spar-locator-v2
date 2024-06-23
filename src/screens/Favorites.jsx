@@ -8,25 +8,26 @@ import "../components/i18n";
 export default function Favorites() {
   const [likedItems, setLikedItems] = useState([]);
   const { theme } = useContext(ThemeContext);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
+  // Load liked items from AsyncStorage on mounting
   useEffect(() => {
     const loadLikedItems = async () => {
       try {
-        const savedLikedItems = await AsyncStorage.getItem("likedItems");
+        const savedLikedItems = await AsyncStorage.getItem("likedItems"); // Retrieve liked items from AsyncStorage
         if (savedLikedItems) {
           const parsedItems = JSON.parse(savedLikedItems).filter(
             (item) => typeof item === "object" && item !== null
-          );
-          setLikedItems(parsedItems);
+          ); // Parse retrieved data and filter out non-object items
+          setLikedItems(parsedItems); // Update state with parsed and filtered liked items
         }
       } catch (error) {
         console.error("Failed to load liked items", error);
       }
     };
 
-    loadLikedItems();
-  }, []);
+    loadLikedItems(); 
+  }, []); 
 
   return (
     <ScrollView
@@ -41,6 +42,7 @@ export default function Favorites() {
           {t("Favorites.title")}
         </Text>
       </View>
+      {/* Render liked items or show message if there aren't any liked items yet */}
       {likedItems.length > 0 ? (
         likedItems.map((item, index) => (
           <View className="p-2" key={index}>
@@ -66,6 +68,7 @@ export default function Favorites() {
           </View>
         ))
       ) : (
+        // If there are no liked items show message
         <View className="flex-1 justify-center items-center">
           <Text
             className={`text-lg ${

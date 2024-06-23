@@ -20,6 +20,7 @@ function AppNavigator() {
 
   const { t, i18n } = useTranslation();
 
+  // Load selected language from AsyncStorage
   useEffect(() => {
     const loadLanguage = async () => {
       const storedLanguage = await AsyncStorage.getItem("selectedLanguage");
@@ -53,6 +54,7 @@ function AppNavigator() {
   );
 }
 
+// Main app component to provide theme context
 export default function App() {
   return (
     <ThemeProvider>

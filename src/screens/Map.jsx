@@ -10,7 +10,7 @@ import {
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import { ThemeContext } from "../components/context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import "../components/i18n";
@@ -28,8 +28,9 @@ export default function Map() {
   const { theme } = useContext(ThemeContext);
 
   const route = useRoute();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
+  // Fetch markers from webservice and set them in state
   useEffect(() => {
     fetch(
       "https://stud.hosted.hr.nl/1027694/Programmeren/PRG07/Spar-Locator/webservice.json"
@@ -42,11 +43,13 @@ export default function Map() {
         console.error(error);
       });
 
+// If a store is passed in route parameters, handle marker press (opening modal)
     if (route.params?.store) {
       handleMarkerPress(route.params.store);
     }
   }, [route.params]);
 
+  // Request location permissions of the user
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -60,6 +63,7 @@ export default function Map() {
     })();
   }, []);
 
+  // Animate to users location
   const goToUserLocation = () => {
     if (location) {
       mapRef.current.animateToRegion({
@@ -71,6 +75,7 @@ export default function Map() {
     }
   };
 
+  // Open modal when clicking on a marker
   const handleMarkerPress = (marker) => {
     setSelectedMarker(marker);
     calculateDistance(marker);
@@ -85,10 +90,9 @@ export default function Map() {
 
   // Calculate the distance between user and store
   // Source: https://www.movable-type.co.uk/scripts/latlong.html
-
   const calculateDistance = (marker) => {
     if (location) {
-      const R = 6371;
+      const R = 6371; // Radius of the earth in km 
       const lat1 = location.latitude;
       const lon1 = location.longitude;
       const lat2 = marker.latitude;
@@ -102,13 +106,14 @@ export default function Map() {
           Math.sin(dLon / 2) *
           Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      const distance = R * c;
+      const distance = R * c; // Distance in km
       setDistance(distance.toFixed(2));
     }
   };
 
   return (
     <>
+    {/* Display map and markers */}
       <MapView
         ref={mapRef}
         style={styles.map}
@@ -121,6 +126,7 @@ export default function Map() {
         }}
         userInterfaceStyle={theme === "light" ? "light" : "dark"}
       >
+        {/* Map all markers on the map */}
         {markers.map((marker, index) => (
           <Marker
             key={index}
@@ -149,7 +155,7 @@ export default function Map() {
           <Ionicons name="pin-sharp" size={32} color="#D43E41" />
         </View>
       </TouchableOpacity>
-
+      {/* Modal to show details of a store */}
       <Modal
         animationType="slide"
         transparent={true}
