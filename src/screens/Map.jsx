@@ -12,6 +12,8 @@ import MapView, { Marker } from "react-native-maps";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ThemeContext } from "../components/context/ThemeContext";
+import { useTranslation } from "react-i18next";
+import "../components/i18n";
 
 export default function Map() {
   const [location, setLocation] = useState(null);
@@ -26,7 +28,7 @@ export default function Map() {
   const { theme } = useContext(ThemeContext);
 
   const route = useRoute();
-  const navigation = useNavigation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch(
@@ -178,14 +180,14 @@ export default function Map() {
               <Text
                 className={`${theme === "light" ? "text-black" : "text-white"}`}
               >
-                Distance: {distance} km
+                {t("Map.distance")}: {distance} km
               </Text>
             )}
             <TouchableOpacity
               className="bg-red px-4 py-2 w-1/2 rounded-lg flex items-center justify-center"
               onPress={() => setModalVisible(false)}
             >
-              <Text className="text-white font-bold">Close</Text>
+              <Text className="text-white font-bold">{t("Button.close")}</Text>
             </TouchableOpacity>
           </View>
         </View>

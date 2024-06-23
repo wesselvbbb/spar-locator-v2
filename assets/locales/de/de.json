@@ -1,0 +1,20 @@
+{
+  "welcome": "Finde Spar-Märkte in der Nähe!",
+  "show_on_map": "Auf der Karte anzeigen",
+  "back": "Zurück",
+  "Favorites": {
+    "title": "Favoriten",
+    "not_found": "Noch keine Favoriten!"
+  },
+  "Settings": {
+    "title": "Einstellungen",
+    "theme": "Thema wählen",
+    "language": "Sprache wählen"
+  },
+  "Map": {
+    "distance": "Entfernung"
+  },
+  "Button": {
+    "close": "schließen"
+  }
+}

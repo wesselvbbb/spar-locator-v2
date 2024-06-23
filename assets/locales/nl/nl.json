@@ -1,0 +1,20 @@
+{
+  "welcome": "Vind Spar-winkels in de buurt!",
+  "show_on_map": "Toon op kaart",
+  "back": "Terug",
+  "Favorites": {
+    "title": "Favorieten",
+    "not_found": "Nog geen favorieten!"
+  },
+  "Settings": {
+    "title": "Instellingen",
+    "theme": "Kies thema",
+    "language": "Kies taal"
+  },
+  "Map": {
+    "distance": "Afstand"
+  },
+  "Button": {
+    "close": "sluiten"
+  }
+}

@@ -2,10 +2,13 @@ import { useEffect, useState, useContext } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../components/context/ThemeContext";
+import { useTranslation } from "react-i18next";
+import "../components/i18n";
 
 export default function Favorites() {
   const [likedItems, setLikedItems] = useState([]);
   const { theme } = useContext(ThemeContext);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const loadLikedItems = async () => {
@@ -35,7 +38,7 @@ export default function Favorites() {
             theme === "light" ? "text-black" : "text-white"
           }`}
         >
-          Favorites
+          {t("Favorites.title")}
         </Text>
       </View>
       {likedItems.length > 0 ? (
@@ -69,7 +72,7 @@ export default function Favorites() {
               theme === "light" ? "text-black" : "text-white"
             }`}
           >
-            No favorites yet!
+            {t("Favorites.not_found")}
           </Text>
         </View>
       )}

@@ -1,0 +1,20 @@
+{
+  "welcome": "¡Encuentra tiendas Spar cercanas!",
+  "show_on_map": "Mostrar en el mapa",
+  "back": "Atrás",
+  "Favorites": {
+    "title": "Favoritos",
+    "not_found": "¡Aún no hay favoritos!"
+  },
+  "Settings": {
+    "title": "Configuración",
+    "theme": "Elige tema",
+    "language": "Elige idioma"
+  },
+  "Map": {
+    "distance": "Distancia"
+  },
+  "Button": {
+    "close": "cerrar"
+  }
+}

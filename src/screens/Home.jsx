@@ -4,12 +4,16 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../components/context/ThemeContext";
+import { useTranslation } from "react-i18next";
+import "../components/i18n";
 
 export default function Home({ navigation }) {
   const [items, setItems] = useState([]);
   const [likedItems, setLikedItems] = useState([]);
 
   const { theme } = useContext(ThemeContext);
+
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     fetch(
@@ -71,13 +75,20 @@ export default function Home({ navigation }) {
       <ScrollView
         className={`h-full ${theme === "light" ? "bg-white" : "bg-black"}`}
       >
-        <View className="py-4 flex-1 justify-center items-center ">
+        <View className="py-4 flex-1 justify-center items-center">
           <Text
             className={`text-3xl font-bold py-2 ${
               theme === "light" ? "text-black" : "text-white"
             }`}
           >
             Spar Locator
+          </Text>
+          <Text
+            className={`font-semibold text-lg italic mb-4 ${
+              theme === "light" ? "text-black" : "text-white"
+            }`}
+          >
+            {t("welcome")}
           </Text>
           {items.map((item, index) => (
             <View className="max-w-md w-full" key={index}>
@@ -120,7 +131,7 @@ export default function Home({ navigation }) {
                     }
                   >
                     <Text className="text-green underline font-semibold">
-                      Show on map
+                      {t("show_on_map")}
                     </Text>
                   </TouchableOpacity>
                 </View>
