@@ -68,8 +68,8 @@ export default function Settings() {
         </Text>
         <View className="flex flex-row gap-4">
           {[
-            { isoCode: "nl", lang: "nl" },
             { isoCode: "gb", lang: "en" },
+            { isoCode: "nl", lang: "nl" },
             { isoCode: "es", lang: "es" },
             { isoCode: "it", lang: "it" },
             { isoCode: "de", lang: "de" },
@@ -79,7 +79,9 @@ export default function Settings() {
               onPress={() => changeLanguage(lang)}
               className={
                 selectedLanguage === lang
-                  ? "border-2 border-white"
+                  ? theme === "light"
+                    ? "border-2 border-black"
+                    : "border-2 border-white"
                   : "border-none"
               }
             >
