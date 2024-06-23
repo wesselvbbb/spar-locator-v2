@@ -132,6 +132,7 @@ export default function Home({ navigation }) {
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate("Map", {
+                        // parameters to show store location on map
                         location: item.location,
                         store: item,
                       })
